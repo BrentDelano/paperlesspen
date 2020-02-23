@@ -4,6 +4,8 @@
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 
+const int buttonpin = 2;
+
 float angX = 0.0;
 float angY = 0.0;
 float angZ = 0.0;
@@ -17,6 +19,8 @@ float py = 0.0;
 Adafruit_MPU6050 mpu;
 
 void setup(void) {
+  pinMode(buttonpin, INPUT);
+  
   Serial.begin(115200);
   while (!Serial) {
     delay(10); // will pause Zero, Leonardo, etc until serial console opens
@@ -85,20 +89,23 @@ void loop() {
   }
 
   // Print out the values
+  if (digitalRead(buttonpin) == HIGH) {Serial.print("1,");} 
+  else {Serial.print("0,");}
+  
   Serial.print(px);
   Serial.print(",");
   Serial.print(py);
-  Serial.print(" -- ");
-  Serial.print(vx);
   Serial.print(",");
-  Serial.print(vy);
-  Serial.print(" -- ");
-  Serial.print(accx);
-  Serial.print(",");
-  Serial.print(accy);
-  Serial.print(",");
-  Serial.print(accz);
-  Serial.print(" -- ");
+//  Serial.print(vx);
+//  Serial.print(",");
+//  Serial.print(vy);
+//  Serial.print(",");
+//  Serial.print(accx);
+//  Serial.print(",");
+//  Serial.print(accy);
+//  Serial.print(",");
+//  Serial.print(accz);
+//  Serial.print(",");
   Serial.print(angX);
   Serial.print(",");
   Serial.print(angY);
