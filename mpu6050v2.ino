@@ -12,9 +12,11 @@ float angZ = 0.0;
 
 float vx = 0.0;
 float vy = 0.0;
+float vz = 0.0;
 
 float px = 0.0;
 float py = 0.0;
+float pz = 0.0;
 
 Adafruit_MPU6050 mpu;
 
@@ -72,12 +74,9 @@ void loop() {
   accz -=  ay * sin(roll) + az * cos(roll);
 
   // Calculate current position
-  if (abs(accx) >= 0.75) {
-    vx += accx * 0.0375;
-  }
-  if (abs(accy) >= 0.75) {
-    vy += accy * 0.0375;
-  }
+//  if (abs(accx) >= 0.75) {vx += accx * 0.0375;}
+//  if (abs(accy) >= 0.75) {vy += accy * 0.0375;}
+//  if (abs(accz) >= 0.75) {vz += accz * 0.0375;}
   
   if (abs(accx) >= 1.25) {
 //    x += vx * 0.0375 + 0.5 * accx * 0.0375 * 0.0375;
@@ -87,6 +86,10 @@ void loop() {
 //    y += vy * 0.0375 + 0.5 * accy * 0.0375 * 0.0375;
     py += 0.5 * accy * 0.0375 * 0.0375;
   }
+  if (abs(accz) >= 1.25) {
+//    y += vy * 0.0375 + 0.5 * accy * 0.0375 * 0.0375;
+    pz += 0.5 * accz * 0.0375 * 0.0375;
+  }
 
   // Print out the values
   if (digitalRead(buttonpin) == HIGH) {Serial.print("1,");} 
@@ -95,6 +98,8 @@ void loop() {
   Serial.print(px);
   Serial.print(",");
   Serial.print(py);
+  Serial.print(",");
+  Serial.print(pz);
   Serial.print(",");
 //  Serial.print(vx);
 //  Serial.print(",");
