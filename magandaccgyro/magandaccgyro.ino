@@ -35,9 +35,9 @@ float angZ = 0.0;
 //float vy = 0.0;
 //float vz = 0.0;
 
-float px = 0.0;
-float py = 0.0;
-float pz = 0.0;
+float mpux = 0.0;
+float mpuy = 0.0;
+float mpuz = 0.0;
 
 void setupSensor() {
   // 1.) Set the accelerometer range
@@ -146,45 +146,67 @@ void loop() {
 
   // Calculate current position
 
-//  if (abs(accx) >= 0.75) {vx += accx * 0.03;}
-//  if (abs(accy) >= 0.75) {vy += accy * 0.03;}
-//  if (abs(accz) >= 0.75) {vz += accz * 0.03;}
+  //  if (abs(accx) >= 0.75) {vx += accx * 0.03;}
+  //  if (abs(accy) >= 0.75) {vy += accy * 0.03;}
+  //  if (abs(accz) >= 0.75) {vz += accz * 0.03;}
 
   if (abs(accx) >= 1) {
-//    px += vx * 0.03 + 0.5 * accx * pow(0.03,2);
-    px += 0.5 * accx * pow(0.03,2);
+    //    mpux += vx * 0.03 + 0.5 * accx * pow(0.03,2);
+    mpux += accx * 0.03;
   }
   if (abs(accy) >= 1) {
-//    py += vy * 0.03 + 0.5 * accy * pow(0.03,2);
-    py += 0.5 * accy * pow(0.03,2);
-    }
-  if (abs(accz) >= 1.25) {
-//    pz += vz * 0.03 + 0.5 * accz * pow(0.03,2);
-    pz += 0.5 * accz * pow(0.03,2);
+    //    mpuy += vy * 0.03 + 0.5 * accy * pow(0.03,2);
+    mpuy += accy * 0.03;
   }
-
-  // Print out the values
-  if (digitalRead(buttonpin) == HIGH) {Serial.print("1, ");} else {Serial.print("0, ");}
-
-  Serial.print(px);     Serial.print(", ");
-  Serial.print(py);     Serial.print(", ");
-  Serial.print(pz);     Serial.print(", ");
-  Serial.print(angX);   Serial.print(", ");
-  Serial.print(angY);   Serial.print(", ");
-  Serial.print(angZ);   Serial.print(", ");
+  if (abs(accz) >= 1.25) {
+    //    mpuz += vz * 0.03 + 0.5 * accz * pow(0.03,2);
+    mpuz += accz * 0.03;
+  }
 
   // Magnetometer Data
   float magx = m.magnetic.x - magx0;
   float magy = m.magnetic.y - magy0;
   float magz = m.magnetic.z - magz0;
 
-  float x = pow(abs(magx), 0.4);
-  float y = pow(abs(magy), 0.4);
-  float z = pow(abs(magz), 0.4);
+  magx = pow(abs(magx), 0.5);
+  magy = pow(abs(magy), 0.5);
+  magz = pow(abs(magz), 0.5);
 
-  Serial.print(x);      Serial.print(", ");
-  Serial.print(y);      Serial.print(", ");
-  Serial.print(z);      Serial.println();
+  // Scale down the magnetometer position values & reposition MPU if it strays
+  magx = magx/8;
+  magy = magy/8;
+  magz = magz/8;
+
+  if(mpux > 8) {mpux = 0;}
+  if(mpuy > 8) {mpuy = 0;}
+  if(mpuz > 8) {mpuz = 0;}
+
+  // Weighted average of mag and mpu positions
+  float magweightx = 0.0;
+  float magweighty = 0.0;
+  float magweightz = 0.0;
+  if (magx <= 6.5) {magweightx = magx/6.5;} else {magweightx = 1;}
+  if (magy <= 6.5) {magweighty = magy/6.5;} else {magweighty = 1;}
+  if (magz <= 6.5) {magweightz = magz/6.5;} else {magweightz = 1;}
+  
+  float x = magweightx*magx + (1-magweightx)*mpux;
+  float y = magweighty*magy + (1-magweighty)*mpuy;
+  float z = magweightz*magz + (1-magweightz)*mpuz;
+
+  // Print out the values
+  if (digitalRead(buttonpin) == HIGH) {Serial.print("1, ");} else {Serial.print("0, ");}
+  Serial.print(x);        Serial.print(", ");
+  Serial.print(y);        Serial.print(", ");
+  Serial.print(z);        Serial.print(", ");
+  Serial.print(mpux);     Serial.print(", ");
+  Serial.print(mpuy);     Serial.print(", ");
+  Serial.print(mpuz);     Serial.print(", ");
+  Serial.print(magx);     Serial.print(", ");
+  Serial.print(magy);     Serial.print(", ");
+  Serial.print(magz);     Serial.print(", ");
+  Serial.print(angX);     Serial.print(", ");
+  Serial.print(angY);     Serial.print(", ");
+  Serial.print(angZ);     Serial.println();
 
   delay(30);
 }
