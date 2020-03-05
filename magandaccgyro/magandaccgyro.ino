@@ -31,9 +31,9 @@ float angX = 0.0;
 float angY = 0.0;
 float angZ = 0.0;
 
-float vx = 0.0;
-float vy = 0.0;
-float vz = 0.0;
+//float vx = 0.0;
+//float vy = 0.0;
+//float vz = 0.0;
 
 float px = 0.0;
 float py = 0.0;
@@ -106,10 +106,6 @@ void setup() {
   magy0 = m.magnetic.y;
   magz0 = m.magnetic.z;
 
-  Serial.print(magx0);      Serial.print(", ");
-  Serial.print(magy0);      Serial.print(", ");
-  Serial.print(magz0);      Serial.println();
-
   Serial.println("Finished initializing.");
   delay(1000);
 }
@@ -131,9 +127,9 @@ void loop() {
   float yaw = g.gyro.z;
 
   // Calculate angle relative to starting angle
-  angX += roll * 0.0375;
-  angY += pitch * 0.0375;
-  angZ += yaw * 0.0375;
+  angX += roll * 0.03;
+  angY += pitch * 0.03;
+  angZ += yaw * 0.03;
 
   // Remove gravity from acceleration
   float ax = accx, ay = accy, az = 0;
@@ -149,23 +145,26 @@ void loop() {
   accz -=  ay * sin(roll) + az * cos(roll);
 
   // Calculate current position
-  if (abs(accx) >= 1.25) {
-    px += 0.5 * accx * 0.0375 * 0.0375;
+
+//  if (abs(accx) >= 0.75) {vx += accx * 0.03;}
+//  if (abs(accy) >= 0.75) {vy += accy * 0.03;}
+//  if (abs(accz) >= 0.75) {vz += accz * 0.03;}
+
+  if (abs(accx) >= 1) {
+//    px += vx * 0.03 + 0.5 * accx * pow(0.03,2);
+    px += 0.5 * accx * pow(0.03,2);
   }
-  if (abs(accy) >= 1.25) {
-    py += 0.5 * accy * 0.0375 * 0.0375;
-  }
+  if (abs(accy) >= 1) {
+//    py += vy * 0.03 + 0.5 * accy * pow(0.03,2);
+    py += 0.5 * accy * pow(0.03,2);
+    }
   if (abs(accz) >= 1.25) {
-    pz += 0.5 * accz * 0.0375 * 0.0375;
+//    pz += vz * 0.03 + 0.5 * accz * pow(0.03,2);
+    pz += 0.5 * accz * pow(0.03,2);
   }
 
   // Print out the values
-  if (digitalRead(buttonpin) == HIGH) {
-    Serial.print("1, ");
-  }
-  else {
-    Serial.print("0, ");
-  }
+  if (digitalRead(buttonpin) == HIGH) {Serial.print("1, ");} else {Serial.print("0, ");}
 
   Serial.print(px);     Serial.print(", ");
   Serial.print(py);     Serial.print(", ");
@@ -187,5 +186,5 @@ void loop() {
   Serial.print(y);      Serial.print(", ");
   Serial.print(z);      Serial.println();
 
-  delay(50);
+  delay(30);
 }
