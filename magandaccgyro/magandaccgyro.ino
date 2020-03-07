@@ -183,29 +183,25 @@ void loop() {
 
   // Weighted average of mag and mpu positions
   float magweightx = 0.0;
-  float magweighty = 0.0;
   float magweightz = 0.0;
   if (magx <= 6.5) {magweightx = magx/6.5;} else {magweightx = 1;}
-  if (magy <= 6.5) {magweighty = magy/6.5;} else {magweighty = 1;}
   if (magz <= 6.5) {magweightz = magz/6.5;} else {magweightz = 1;}
   
   float x = magweightx*magx + (1-magweightx)*mpux;
-  float y = magweighty*magy + (1-magweighty)*mpuy;
-  float z = magweightz*magz + (1-magweightz)*mpuz;
+  float y = magweightz*magz + (1-magweightz)*mpuy;
 
   // Print out the values
   if (digitalRead(buttonpin) == HIGH) {Serial.print("1, ");} else {Serial.print("0, ");}
-  Serial.print(x);        Serial.print(", ");
-  Serial.print(y);        Serial.print(", ");
-  Serial.print(z);        Serial.print(", ");
-  Serial.print(mpux);     Serial.print(", ");
-  Serial.print(mpuy);     Serial.print(", ");
-  Serial.print(mpuz);     Serial.print(", ");
-  Serial.print(magx);     Serial.print(", ");
-  Serial.print(magy);     Serial.print(", ");
-  Serial.print(magz);     Serial.print(", ");
-  Serial.print(angX);     Serial.print(", ");
-  Serial.print(angY);     Serial.print(", ");
+  Serial.print(x);        Serial.print(",");
+  Serial.print(y);        Serial.print(",");
+  Serial.print(mpux);     Serial.print(",");
+  Serial.print(mpuy);     Serial.print(",");
+  Serial.print(mpuz);     Serial.print(",");
+  Serial.print(magx);     Serial.print(",");
+  Serial.print(magy);     Serial.print(",");
+  Serial.print(magz);     Serial.print(",");
+  Serial.print(angX);     Serial.print(",");
+  Serial.print(angY);     Serial.print(",");
   Serial.print(angZ);     Serial.println();
 
   delay(30);
