@@ -69,7 +69,7 @@ void setup() {
 
   // Try to initialize MPU6050
   if (!mpu.begin()) {
-    Serial.println("Failed to find MPU6050 chip.");
+//    Serial.println("Failed to find MPU6050 chip.");
     while (1) {
       delay(10);
     }
@@ -77,10 +77,10 @@ void setup() {
 
   // Try to initialize LSM9DS1
   if (!lsm.begin()) {
-    Serial.println("Failed to initialize the LSM9DS1.");
+//    Serial.println("Failed to initialize the LSM9DS1.");
     while (1);
   }
-  Serial.println("Found LSM9DS1 9DOF");
+//  Serial.println("Found LSM9DS1 9DOF");
 
   // Set ranges for MPU6050
   mpu.setAccelerometerRange(MPU6050_RANGE_16_G);
@@ -90,7 +90,7 @@ void setup() {
   delay(100);
 
   // Setup magnemtometer
-  Serial.println("Initializing... remove any nearby magnets from magnetometer sensor...");
+//  Serial.println("Initializing... remove any nearby magnets from magnetometer sensor...");
   delay(3000);
 
   // helper to just set the default scaling we want, see above!
@@ -191,7 +191,7 @@ void loop() {
   float y = magweightz*magz + (1-magweightz)*mpuy;
 
   // Print out the values
-  if (digitalRead(buttonpin) == HIGH) {Serial.print("1, ");} else {Serial.print("0, ");}
+  if (digitalRead(buttonpin) == HIGH) {Serial.print("1,");} else {Serial.print("0,");}
   Serial.print(x);        Serial.print(",");
   Serial.print(y);        Serial.print(",");
   Serial.print(mpux);     Serial.print(",");
