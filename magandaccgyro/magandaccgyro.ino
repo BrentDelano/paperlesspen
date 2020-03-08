@@ -86,7 +86,7 @@ void setup() {
   mpu.setAccelerometerRange(MPU6050_RANGE_16_G);
   mpu.setGyroRange(MPU6050_RANGE_250_DEG);
   mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
-  Serial.println("");
+//  Serial.println("");
   delay(100);
 
   // Setup magnemtometer
@@ -106,7 +106,7 @@ void setup() {
   magy0 = m.magnetic.y;
   magz0 = m.magnetic.z;
 
-  Serial.println("Finished initializing.");
+//  Serial.println("Finished initializing.");
   delay(1000);
 }
 
