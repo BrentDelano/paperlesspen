@@ -25,7 +25,7 @@ float magxM = 0;
 float magyM = 0;
 float magzM = 0;
 
-const int buttonpin = 2;
+const int buttonpin = 3;
 
 float angX = 0.0;
 float angY = 0.0;
@@ -192,8 +192,8 @@ void loop() {
 
   // Print out the values
   if (digitalRead(buttonpin) == HIGH) {Serial.print("1,");} else {Serial.print("0,");}
-  Serial.print(x);        Serial.print(",");
-  Serial.print(y);        Serial.print(",");
+  Serial.print(abs(x));        Serial.print(",");
+  Serial.print(abs(y));        Serial.print(",");
   Serial.print(mpux);     Serial.print(",");
   Serial.print(mpuy);     Serial.print(",");
   Serial.print(mpuz);     Serial.print(",");
